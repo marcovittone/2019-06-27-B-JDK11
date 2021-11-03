@@ -6,8 +6,17 @@ public class TestDao {
 
 	public static void main(String[] args) {
 		EventsDao dao = new EventsDao();
-		for(Event e : dao.listAllEvents())
-			System.out.println(e);
+		
+		
+//		for(Event e : dao.listAllEvents())
+//			System.out.println(e);
+		
+		
+		for(String tipo: dao.getTypeGivenMontAndCategory("drug-alcohol", 2)) {
+			
+			System.out.println(tipo);
+			
+		}
 	}
 
 }
