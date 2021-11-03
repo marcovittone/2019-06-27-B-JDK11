@@ -5,8 +5,10 @@
 package it.polito.tdp.crimes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.crimes.model.Connessione;
 import it.polito.tdp.crimes.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,7 +47,28 @@ public class CrimesController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Crea grafo...\n");
+    	
+    	String categoria = this.boxCategoria.getValue();
+    	Integer mese = this.boxMese.getValue();
+
+    	if(categoria==null)
+    		{
+    			this.txtResult.setText("inserire categoria");
+    			return;
+    		}
+    	
+    	if(mese == null)
+		{
+			this.txtResult.setText("inserire mese");
+			return;
+		}
+    	
+    	List<Connessione> risultato = this.model.creaGrafo(categoria, mese);
+    	
+    	for(Connessione c:risultato)
+    		this.txtResult.appendText(c+"\n");
+    	
+    	
     }
     
     @FXML

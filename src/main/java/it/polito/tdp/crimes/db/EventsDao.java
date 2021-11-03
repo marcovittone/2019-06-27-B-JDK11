@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import it.polito.tdp.crimes.model.Connessione;
 import it.polito.tdp.crimes.model.Event;
 
 
@@ -151,5 +153,47 @@ public class EventsDao {
 		return null ;
 	}
 	}
+	
+public List<Connessione> getEdges(String categoria, int month) {
+		
+		
+		String sql = "SELECT e1.offense_type_id AS t1, e2.offense_type_id AS t2, COUNT(DISTINCT e1.neighborhood_id) AS conto "
+				+ "FROM `events` AS e1, `events` AS e2 "
+				+ "WHERE MONTH(e1.reported_date) = ? AND MONTH(e2.reported_date) = MONTH(e1.reported_date) AND  e1.offense_category_id = ? AND e2.offense_category_id = e1.offense_category_id "
+				+ "AND  e1.neighborhood_id = e2.neighborhood_id AND e1.offense_type_id < e2.offense_type_id "
+				+ "GROUP BY t1, t2" ;
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			st.setString(2, categoria);
+			st.setInt(1, month);
+			
+			List<Connessione> list = new ArrayList<>() ;
+			
+			ResultSet res = st.executeQuery() ;
+			
+			while(res.next()) {
+				try {
+					
+					Connessione c = new Connessione(res.getString("t1"),res.getString("t2"),res.getInt("conto"));
+					list.add(c);
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+			}
+			
+			conn.close();
+			return list ;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null ;
+		}
+	}
+	
+	
 
 }
