@@ -159,8 +159,10 @@ public List<Connessione> getEdges(String categoria, int month) {
 		
 		String sql = "SELECT e1.offense_type_id AS t1, e2.offense_type_id AS t2, COUNT(DISTINCT e1.neighborhood_id) AS conto "
 				+ "FROM `events` AS e1, `events` AS e2 "
-				+ "WHERE MONTH(e1.reported_date) = ? AND MONTH(e2.reported_date) = MONTH(e1.reported_date) AND  e1.offense_category_id = ? AND e2.offense_category_id = e1.offense_category_id "
-				+ "AND  e1.neighborhood_id = e2.neighborhood_id AND e1.offense_type_id < e2.offense_type_id "
+				+ "WHERE MONTH(e1.reported_date) = ? AND MONTH(e2.reported_date) = MONTH(e1.reported_date) "
+				+ "AND  e1.offense_category_id = ? AND e2.offense_category_id = e1.offense_category_id "
+				+ "AND  e1.neighborhood_id = e2.neighborhood_id "
+				+ "AND e1.offense_type_id < e2.offense_type_id "
 				+ "GROUP BY t1, t2" ;
 		try {
 			Connection conn = DBConnect.getConnection() ;

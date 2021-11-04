@@ -25,7 +25,6 @@ public class Model {
 	
 	public Model(){
 		
-		 this.grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 		 this.dao = new EventsDao();
 		
 	}
@@ -34,11 +33,11 @@ public class Model {
 	public List<Connessione> creaGrafo(String categoria, int month) {
 		
 		
+		 this.grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+		
 		Graphs.addAllVertices(this.grafo, this.dao.getTypeGivenMontAndCategory(categoria,month));
 		
-		
 		List<Connessione> connessioni = this.dao.getEdges(categoria, month);
-		
 		double media=0;
 		
 		for(Connessione c: connessioni)
@@ -51,21 +50,16 @@ public class Model {
 		
 		List<Connessione> risultato = new ArrayList<Connessione>();
 		
-		
 		for(Connessione c: connessioni)
 		{
 			if(c.getPeso()> media)
 				risultato.add(c);
-				
 		}
 		
 		System.out.println("GRAFO CRATO CON "+this.grafo.vertexSet().size()+" VERTICI");
 		System.out.println("GRAFO CRATO CON "+this.grafo.edgeSet().size()+" ARCHI");
 		
 		return risultato;
-		
-		
-		
 		
 	}
 
