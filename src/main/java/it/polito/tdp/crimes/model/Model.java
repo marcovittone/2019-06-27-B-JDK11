@@ -18,8 +18,10 @@ import it.polito.tdp.crimes.db.EventsDao;
 public class Model {
 	
 	
-	Graph<String,DefaultWeightedEdge> grafo;
-	EventsDao dao;
+	private Graph<String,DefaultWeightedEdge> grafo;
+	private EventsDao dao;
+	private int maxValue = 0;
+	private List<String> percorso;
 	
 	public Model(){
 		
@@ -76,6 +78,46 @@ public class Model {
 
 	public List<Integer> getAllMonths() {
 		return this.dao.getAllMonths();
+	}
+
+
+	public List<String> getPercorso(Connessione c) {
+		this.maxValue = 0;
+		this.percorso = new ArrayList<>();
+		ricorsione(percorso, c.getA(), c.getB());
+		return this.percorso;
+	}
+	
+	public void ricorsione(List<String> percorso, String nodo, String arrivo) {
+		
+		//caso ciclo
+		if(percorso.contains(nodo))
+			return;
+		
+		//caso di effettivo arrivo
+		if(nodo.equals(arrivo))
+		{
+			percorso.add(arrivo);
+			
+			if(percorso.size()> this.maxValue)
+			{
+				this.maxValue = percorso.size();
+				this.percorso = new ArrayList<>(percorso);
+			}
+			percorso.remove(percorso.size()-1);
+			return;
+		}
+		
+		
+		percorso.add(nodo);
+		
+		for(String s: Graphs.neighborListOf(this.grafo, nodo)) {
+			ricorsione(percorso,s,arrivo);
+		}
+		
+		percorso.remove(percorso.size()-1);
+		
+		return;
 	}
 	
 }

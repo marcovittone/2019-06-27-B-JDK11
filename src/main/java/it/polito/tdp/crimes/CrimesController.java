@@ -36,7 +36,7 @@ public class CrimesController {
     private Button btnAnalisi; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxArco"
-    private ComboBox<?> boxArco; // Value injected by FXMLLoader
+    private ComboBox<Connessione> boxArco; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnPercorso"
     private Button btnPercorso; // Value injected by FXMLLoader
@@ -46,7 +46,10 @@ public class CrimesController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	
     	txtResult.clear();
+    	this.boxArco.getItems().clear();
     	
     	String categoria = this.boxCategoria.getValue();
     	Integer mese = this.boxMese.getValue();
@@ -66,15 +69,32 @@ public class CrimesController {
     	List<Connessione> risultato = this.model.creaGrafo(categoria, mese);
     	
     	for(Connessione c:risultato)
-    		this.txtResult.appendText(c+"\n");
+    		{
+    			this.txtResult.appendText(c+"\n");
+    			this.boxArco.getItems().add(c);
+    		}
     	
     	
     }
     
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
-    	txtResult.clear();
-    	txtResult.appendText("Calcola percorso...\n");
+    	
+    	this.txtResult.clear();
+    	
+    	Connessione c = this.boxArco.getValue();
+    	
+    	if(c== null)
+    		this.txtResult.appendText("\n ERRORE SELEZIONARE UN ARCO");
+    	else {
+			List<String> cammino = this.model.getPercorso(c);
+			
+			for(String s: cammino)
+				this.txtResult.appendText("\n"+s);
+		}
+    	
+    	
+    	
     }
     
     @FXML // This method is called by the FXMLLoader when initialization is complete

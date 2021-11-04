@@ -34,7 +34,7 @@ public class Connessione {
 	}
 	@Override
 	public String toString() {
-		return "Connessione [a=" + a + ", b=" + b + ", peso=" + peso + "]";
+		return "Connessione : " + a + ", " + b + ", peso=" + peso;
 	}
 	
 	
